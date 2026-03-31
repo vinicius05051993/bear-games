@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<title>Bear Games - Inscrição</title>
+
+<style>
+body {
+  font-family: "Segoe UI", Arial;
+  background: #f5f6f8;
+  padding: 20px;
+  color: #333;
+}
+
+.container {
+  max-width: 900px;
+  margin: auto;
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+h1 {
+  font-size: 22px;
+  margin-bottom: 20px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  border-bottom: 1px solid #ddd;
+  margin-bottom: 20px;
+}
+
+.tab {
+  padding: 10px 20px;
+  cursor: pointer;
+  color: #666;
+  border-bottom: 2px solid transparent;
+}
+
+.tab.active {
+  color: #c40000;
+  border-bottom: 2px solid #c40000;
+  font-weight: 600;
+}
+
+.tab-content {
+  display: none;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+/* STEPS */
+.step {
+  display: none;
+}
+
+.step.active {
+  display: block;
+}
+
+/* INPUTS */
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+}
+
+label {
+  margin-top: 15px;
+  display: block;
+  font-size: 14px;
+  color: #555;
+}
+
+/* BOTÕES */
+button {
+  padding: 10px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.nav-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.nav-buttons button:first-child {
+  background: #e0e0e0;
+}
+
+.nav-buttons button:last-child {
+  background: #c40000;
+  color: white;
+}
+
+/* CHECKBOX */
+.checkbox {
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* TABELA */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+}
+
+th {
+  text-align: left;
+  padding: 10px;
+  font-size: 13px;
+  color: #777;
+  border-bottom: 1px solid #eee;
+}
+
+td {
+  padding: 12px 10px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+/* STATUS */
+.status-ok {
+  color: #1a7f37;
+  font-weight: 600;
+}
+
+.status-pendente {
+  color: #c40000;
+  font-weight: 600;
+}
+
+/* CARD RESPONSÁVEL */
+#dadosResponsavel {
+  background: #f8f9fb;
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+/* MENSAGEM */
+.success {
+  margin-top: 15px;
+  font-size: 14px;
+  color: #1a7f37;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.logo {
+  height: 80px;
+}
+
+.titulo {
+  font-size: 18px;
+  font-weight: 600;
+  color: #c40000;
+}
+</style>
+</head>
+
+<div class="header">
+  <img src="logo.svg" alt="Logo" class="logo">
+</div>
+
+<body>
+
+<div class="container">
+  <h1>Bear Games</h1>
+
+  <!-- TABS -->
+  <div class="tabs">
+    <div class="tab active" onclick="trocarTab(0)">Inscrição</div>
+    <div class="tab" onclick="trocarTab(1)">Status</div>
+  </div>
+
+  <!-- TAB INSCRIÇÃO -->
+  <div class="tab-content active">
+
+    <!-- STEP 1 -->
+    <div class="step active">
+      <h3>1. Seleção do aluno</h3>
+
+      <label>Aluno:</label>
+      <select id="alunoSelect"></select>
+
+      <div id="dadosResponsavel"></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step">
+      <h3>2. Ficha Médica</h3>
+
+      <label>Doença:</label>
+      <input type="text" id="doenca">
+
+      <label>Medicamento:</label>
+      <input type="text" id="medicamento">
+
+      <label>Alergia:</label>
+      <input type="text" id="alergia">
+
+      <label>Observações:</label>
+      <textarea id="obs"></textarea>
+
+      <label>Anexar arquivos:</label>
+      <input type="file" id="arquivo" multiple>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step">
+      <h3>3. Termos</h3>
+
+      <div class="checkbox">
+        <input type="checkbox" id="imagem">
+        <label>Autorizo uso de imagem</label>
+      </div>
+
+      <div class="checkbox">
+        <input type="checkbox" id="participacao">
+        <label>Autorizo participação</label>
+      </div>
+    </div>
+
+    <!-- NAVEGAÇÃO -->
+    <div class="nav-buttons">
+      <button onclick="voltar()">Voltar</button>
+      <button onclick="proximo()">Próximo</button>
+    </div>
+
+    <div id="msg" class="success"></div>
+  </div>
+
+  <!-- TAB STATUS -->
+  <div class="tab-content">
+    <h3>Status das Inscrições</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Aluno</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaStatus"></tbody>
+    </table>
+    <div id="detalhes" style="margin-top:20px; display:none;">
+      <h4>Detalhes da Inscrição</h4>
+      <div id="conteudoDetalhes" style="background:#f8f9fb; padding:15px; border-radius:6px;"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// BASE
+const alunos = [
+  { id: 1, nome: "João Silva", responsavel: "Carlos Souza", telefone: "99999-1111", inscrito: false },
+  { id: 2, nome: "Ana Souza", responsavel: "Carlos Souza", telefone: "99999-2222", inscrito: false }
+];
+
+// ELEMENTOS
+const select = document.getElementById("alunoSelect");
+const dadosResp = document.getElementById("dadosResponsavel");
+const tabela = document.getElementById("tabelaStatus");
+
+const steps = document.querySelectorAll(".step");
+let stepAtual = 0;
+
+// SELECT
+alunos.forEach(a => {
+  const option = document.createElement("option");
+  option.value = a.id;
+  option.textContent = a.nome;
+  select.appendChild(option);
+});
+
+// RESPONSÁVEL
+function atualizarResponsavel() {
+  const aluno = alunos.find(a => a.id == select.value);
+
+  dadosResp.innerHTML = `
+    <p><strong>Responsável:</strong> ${aluno.responsavel}</p>
+    <p><strong>Telefone:</strong> ${aluno.telefone}</p>
+  `;
+}
+
+// TABS
+function trocarTab(index) {
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    t.classList.toggle("active", i === index);
+  });
+
+  document.querySelectorAll(".tab-content").forEach((c, i) => {
+    c.classList.toggle("active", i === index);
+  });
+}
+
+// STEPS
+function mostrarStep() {
+  steps.forEach((s, i) => {
+    s.classList.toggle("active", i === stepAtual);
+  });
+}
+
+function proximo() {
+  if (stepAtual < steps.length - 1) {
+    stepAtual++;
+    mostrarStep();
+  } else {
+    enviar();
+  }
+}
+
+function voltar() {
+  if (stepAtual > 0) {
+    stepAtual--;
+    mostrarStep();
+  }
+}
+
+function mostrarDetalhes(aluno) {
+  const box = document.getElementById("detalhes");
+  const conteudo = document.getElementById("conteudoDetalhes");
+
+  const i = aluno.inscricao;
+
+  conteudo.innerHTML = `
+    <p><strong>Aluno:</strong> ${aluno.nome}</p>
+    <p><strong>Responsável:</strong> ${aluno.responsavel}</p>
+
+    <hr>
+
+    <p><strong>Doença:</strong> ${i.doenca || "-"}</p>
+    <p><strong>Medicamento:</strong> ${i.medicamento || "-"}</p>
+    <p><strong>Alergia:</strong> ${i.alergia || "-"}</p>
+    <p><strong>Observações:</strong> ${i.obs || "-"}</p>
+
+    <hr>
+
+    <p><strong>Uso de imagem:</strong> ${i.imagem ? "Sim" : "Não"}</p>
+    <p><strong>Participação:</strong> ${i.participacao ? "Sim" : "Não"}</p>
+
+    <hr>
+
+    <p><strong>Arquivos anexados:</strong> ${i.arquivos}</p>
+  `;
+
+  box.style.display = "block";
+}
+
+// TABELA
+function renderTabela() {
+  tabela.innerHTML = "";
+
+  alunos.forEach(a => {
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${a.nome}</td>
+      <td class="${a.inscrito ? 'status-ok' : 'status-pendente'}">
+        ${a.inscrito ? 'Inscrito' : 'Não inscrito'}
+      </td>
+    `;
+
+    // 🔥 NOVO: clique na linha
+    tr.style.cursor = a.inscrito ? "pointer" : "default";
+
+    tr.onclick = () => {
+      if (a.inscrito) {
+        mostrarDetalhes(a);
+      }
+    };
+
+    tabela.appendChild(tr);
+  });
+}
+
+// ENVIO
+function enviar() {
+  const imagem = document.getElementById("imagem").checked;
+  const participacao = document.getElementById("participacao").checked;
+
+  if (!imagem || !participacao) {
+    alert("Aceite os termos!");
+    return;
+  }
+
+  const aluno = alunos.find(a => a.id == select.value);
+
+  aluno.inscrito = true;
+
+  // 🔥 NOVO: salvar dados da inscrição
+  aluno.inscricao = {
+    doenca: document.getElementById("doenca").value,
+    medicamento: document.getElementById("medicamento").value,
+    alergia: document.getElementById("alergia").value,
+    obs: document.getElementById("obs").value,
+    imagem,
+    participacao,
+    arquivos: document.getElementById("arquivo").files.length
+  };
+
+  document.getElementById("msg").innerText =
+    "Inscrição realizada para " + aluno.nome;
+
+  limpar();
+  renderTabela();
+
+  stepAtual = 0;
+  mostrarStep();
+}
+
+// LIMPAR
+function limpar() {
+  document.getElementById("doenca").value = "";
+  document.getElementById("medicamento").value = "";
+  document.getElementById("alergia").value = "";
+  document.getElementById("obs").value = "";
+  document.getElementById("arquivo").value = "";
+  document.getElementById("imagem").checked = false;
+  document.getElementById("participacao").checked = false;
+}
+
+// INIT
+select.addEventListener("change", atualizarResponsavel);
+atualizarResponsavel();
+renderTabela();
+mostrarStep();
+
+</script>
+
+</body>
+</html>
